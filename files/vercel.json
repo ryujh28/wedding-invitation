@@ -1,0 +1,17 @@
+{
+  "name": "wedding-invitation",
+  "version": 2,
+  "env": {},
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next@latest"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
