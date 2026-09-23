@@ -5,15 +5,15 @@ import { useEffect, useRef, useState } from 'react';
 /* ------------------------------------------------------------------ */
 /*  기본 정보 — 여기만 고치면 전체에 반영됩니다                           */
 /* ------------------------------------------------------------------ */
-const GROOM = { name: '신랑이름', en: 'Groom', parents: '아버지 · 어머니의 아들', photo: '/photos/01.jpg' };
-const BRIDE = { name: '신부이름', en: 'Bride', parents: '아버지 · 어머니의 딸', photo: '/photos/02.jpg' };
+const GROOM = { name: '류재현', en: 'Groom', parents: '류완석 · 이호연의 아들', photo: '/photos/01.jpg' };
+const BRIDE = { name: '차지예', en: 'Bride', parents: '차우철 · 김기영의 딸', photo: '/photos/02.jpg' };
 
 // 예식 일시 (월은 1~12 그대로)
-const WEDDING = { year: 2024, month: 6, day: 1, hour: 16, minute: 30 };
-const VENUE = { name: '그랜드 볼룸', address: '서울시 강남구 테헤란로 123' };
+const WEDDING = { year: 2027, month: 3, day: 20, hour: 12, minute: 00 };
+const VENUE = { name: '크리스탈볼룸', address: '서울 송파구 올림픽로 240, 롯데호텔월드' };
 
 const SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbxbGVuwj1_r62hILYTrmUNHchqpofaIvLwg_N37aWZDyLq7sR5EME9Z5L7t3ldocd4tbg/exec';
+  'https://script.google.com/macros/s/AKfycbxfdaKBePphPrqCqrQqk-LoTQEceDJ9Ctuiq1IiBoSo1G379TOq5G20KQjSjHqwsKIZsw/exec';
 
 // 메인 화면 슬라이드 (순서대로 크로스페이드)
 const HERO_PHOTOS = ['/photos/04.jpg', '/photos/08.jpg', '/photos/06.jpg', '/photos/05.jpg', '/photos/09.jpg'];
@@ -22,23 +22,20 @@ const GALLERY = Array.from({ length: 10 }, (_, i) => `/photos/${String(i).padSta
 
 const ACCOUNTS = {
   groom: [
-    { role: '신랑', name: '신랑이름', bank: '국민은행', number: '123-456-789012' },
-    { role: '신랑 아버지', name: '이름', bank: '은행', number: '000-000-000000' },
-    { role: '신랑 어머니', name: '이름', bank: '은행', number: '000-000-000000' },
+    { role: '신랑', name: '류재현', bank: '국민은행', number: '123-456-789012' },
+    { role: '신랑 아버지', name: '류완석', bank: '은행', number: '000-000-000000' },
+    { role: '신랑 어머니', name: '이호연', bank: '은행', number: '000-000-000000' },
   ],
   bride: [
-    { role: '신부', name: '신부이름', bank: '우리은행', number: '123-456-789012' },
-    { role: '신부 아버지', name: '이름', bank: '은행', number: '000-000-000000' },
-    { role: '신부 어머니', name: '이름', bank: '은행', number: '000-000-000000' },
+    { role: '신부', name: '차지예', bank: '우리은행', number: '123-456-789012' },
+    { role: '신부 아버지', name: '차우철', bank: '은행', number: '000-000-000000' },
+    { role: '신부 어머니', name: '김기영', bank: '은행', number: '000-000-000000' },
   ],
 };
 
 const SCHEDULE = [
-  { time: '16:00', event: '예식장 입장' },
-  { time: '16:30', event: '결혼식' },
-  { time: '17:00', event: '사진 촬영' },
-  { time: '17:30', event: '폐백' },
-  { time: '18:00', event: '만찬' },
+  { time: '12:00', event: '결혼식' },
+  { time: '13:00', event: '2부 예식' }
 ];
 
 /* ------------------------------------------------------------------ */
