@@ -5,7 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ACCOUNTS,
   BRIDE,
+  CONTACT,
   GALLERY,
+  GREETING,
   GROOM,
   HERO_PHOTOS,
   MAP_LINKS,
@@ -394,26 +396,35 @@ export default function Home() {
       <section className="section">
         <p className="eyebrow reveal">INVITATION</p>
         <h2 className="title reveal">초대합니다</h2>
-        <p className="body-text reveal">
-          처음 만났을 때부터 특별했던 순간들이 모여,
-          <br />
-          이제 함께 새로운 장을 시작하려 합니다.
-          <br />
-          <br />
-          소중한 분들을 초대하여
-          <br />
-          우리의 행복을 나누고 싶습니다.
-        </p>
+        <div className="greeting reveal">
+          {GREETING.map((para) => (
+            <p key={para} className="body-text">
+              {para.split('\n').map((line, j) => (
+                <span key={j}>
+                  {j > 0 && <br />}
+                  {line}
+                </span>
+              ))}
+            </p>
+          ))}
+        </div>
+
+        <div className="parents reveal">
+          {[GROOM, BRIDE].map((p) => (
+            <p key={p.first}>
+              {p.parents} <span className="parents-rel">의 {p.relation}</span> <b>{p.first}</b>
+            </p>
+          ))}
+        </div>
 
         <div className="couple">
           {[GROOM, BRIDE].map((p, i) => (
-            <div key={p.en} className={`couple-card reveal ${i ? 'from-right' : 'from-left'}`}>
+            <div key={p.first} className={`couple-card reveal ${i ? 'from-right' : 'from-left'}`}>
               <div className="couple-photo">
                 <img src={p.photo} alt="" loading="lazy" />
               </div>
               <p className="couple-role">{i ? '신부' : '신랑'}</p>
-              <p className="couple-name">{p.name}</p>
-              <p className="couple-parents">{p.parents}</p>
+              <p className="couple-name">{p.first}</p>
             </div>
           ))}
         </div>
@@ -429,6 +440,9 @@ export default function Home() {
           {dateKo} {timeKo}
           <br />
           {venueFull}
+        </p>
+        <p className="contact reveal">
+          문의 <a href={`tel:${CONTACT.tel}`}>{CONTACT.tel}</a> ({CONTACT.label})
         </p>
         <Calendar />
 
@@ -457,6 +471,9 @@ export default function Home() {
         <div className="reveal">
           <p className="loc-name">{venueFull}</p>
           <p className="loc-addr">{VENUE.address}</p>
+          <p className="contact loc-contact">
+            문의 <a href={`tel:${CONTACT.tel}`}>{CONTACT.tel}</a> ({CONTACT.label})
+          </p>
           <NaverMap />
           <div className="map-links">
             <a href={MAP_LINKS.naver} target="_blank" rel="noopener noreferrer" className="map-link">

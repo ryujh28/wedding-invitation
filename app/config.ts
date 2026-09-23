@@ -5,14 +5,23 @@
 // 배포 주소 (카톡 미리보기 이미지 주소를 만들 때 사용)
 export const SITE_URL = 'https://wedding-invitation-ryujh28.vercel.app';
 
-export const GROOM = { name: '류재현', en: 'Groom', parents: '류완석 · 이호연의 아들', photo: '/photos/01.jpg' };
-export const BRIDE = { name: '차지예', en: 'Bride', parents: '차우철 · 김기영의 딸', photo: '/photos/02.jpg' };
+// name: 첫 화면·카톡 미리보기에 쓰는 전체 이름 / first: 혼주 소개에 쓰는 이름
+export const GROOM = { name: '류재현', first: '재현', parents: '류완석 · 이호연', relation: '아들', photo: '/photos/01.jpg' };
+export const BRIDE = { name: '차지예', first: '지예', parents: '차우철 · 김기영', relation: '딸', photo: '/photos/02.jpg' };
+
+// 인사말 (문단 단위, 문단 안 줄바꿈은 \n)
+export const GREETING = [
+  '봄의 문턱에서\n저희 두 사람은 앞으로 함께 맞이할\n모든 계절을 약속합니다.',
+  '봄의 설렘도, 여름의 눈부심도,\n가을의 깊음도, 겨울의 고요함도\n변함없는 마음으로 함께하겠습니다.',
+  '저희의 작은 시작에 함께하시어\n기쁜 마음으로 축복해주시면 감사하겠습니다.',
+];
 
 // 예식 일시 (월은 1~12 그대로)
 export const WEDDING = { year: 2027, month: 3, day: 20, hour: 12, minute: 0 };
 
 export const VENUE = {
   place: '롯데호텔월드', // 지도 검색·링크에 쓰는 이름
+  floor: '3층',
   hall: '크리스탈볼룸',
   address: '서울 송파구 올림픽로 240',
   // 지도 핀 위치 — 핀이 어긋나 있으면 이 좌표만 고치면 됩니다
@@ -20,10 +29,29 @@ export const VENUE = {
   lng: 127.0983,
 };
 
+// 예식장 문의
+export const CONTACT = { label: '웨딩센터', tel: '02-411-7450' };
+
 // 교통 안내 (필요한 만큼 추가/삭제)
 export const TRANSPORT = [
-  { label: '지하철', lines: ['2호선 · 8호선 잠실역'] },
-  { label: '주차', lines: ['롯데호텔월드 주차장 이용'] },
+  { label: '지하철', lines: ['2, 8호선 잠실역 3번 출구'] },
+  {
+    label: '버스',
+    lines: [
+      '잠실역, 롯데월드 하차',
+      '간선  301, 341, 345, 360',
+      '지선  2415, 3217, 3313, 3314, 3315, 3317, 3323, 3411, 3414, 4319',
+    ],
+  },
+  {
+    label: '자가용',
+    lines: [
+      '롯데호텔월드 주차장 B2층 H, D구역',
+      'B2층 만차 시 B3층에 주차 후 순환카 호출 (02-411-5577 / 대기 약 10분), 호텔 입구까지 이동 (무료)',
+      '차량 등록: 예식장 입구 접수대 및 로비 주차 인증데스크 (4시간 무료)',
+      '롯데호텔 1층 입구 유료 발렛 가능 (30,000원)',
+    ],
+  },
 ];
 
 // 네이버 지도 Client ID (NCP 콘솔에서 발급). 비워두면 지도 없이 길찾기 버튼만 보입니다.
@@ -61,11 +89,11 @@ export const SCHEDULE = [
 export const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 export const pad = (n: number) => String(n).padStart(2, '0');
 const weddingDate = new Date(WEDDING.year, WEDDING.month - 1, WEDDING.day);
-const ampm = WEDDING.hour < 12 ? '오전' : WEDDING.hour === 12 ? '낮' : '오후';
+const ampm = WEDDING.hour < 12 ? '오전' : '오후';
 const hour12 = WEDDING.hour % 12 === 0 ? 12 : WEDDING.hour % 12;
 export const timeKo = `${ampm} ${hour12}시${WEDDING.minute ? ` ${WEDDING.minute}분` : ''}`;
 export const dateKo = `${WEDDING.year}년 ${WEDDING.month}월 ${WEDDING.day}일 ${WEEKDAYS[weddingDate.getDay()]}요일`;
-export const venueFull = `${VENUE.place} ${VENUE.hall}`;
+export const venueFull = `${VENUE.place} ${VENUE.floor} ${VENUE.hall}`;
 
 export const MAP_LINKS = {
   naver: `https://map.naver.com/p/search/${encodeURIComponent(VENUE.place)}`,
