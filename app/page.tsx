@@ -9,7 +9,7 @@ const GROOM = { name: '류재현', en: 'Groom', parents: '류완석 · 이호연
 const BRIDE = { name: '차지예', en: 'Bride', parents: '차우철 · 김기영의 딸', photo: '/photos/02.jpg' };
 
 // 예식 일시 (월은 1~12 그대로)
-const WEDDING = { year: 2027, month: 3, day: 20, hour: 12, minute: 00 };
+const WEDDING = { year: 2027, month: 3, day: 20, hour: 12, minute: 0 };
 const VENUE = { name: '크리스탈볼룸', address: '서울 송파구 올림픽로 240, 롯데호텔월드' };
 
 const SCRIPT_URL =
