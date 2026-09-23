@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 
-export default function WeddingInvitation() {
+export default function Home() {
   const [rsvpData, setRsvpData] = useState({
     name: '',
     phone: '',
@@ -24,8 +24,6 @@ export default function WeddingInvitation() {
     setLoading(true);
 
     try {
-      // Google Apps Script 배포 URL (YOUR_SCRIPT_ID 부분 수정 필요)
-      const scriptUrl = 'https://script.google.com/macros/s/AKfycbxbGVuwj1_r62hILYTrmUNHchqpofaIvLwg_N37aWZDyLq7sR5EME9Z5L7t3ldocd4tbg/exec';
       const scriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
       
       const response = await fetch(scriptUrl, {
@@ -46,7 +44,7 @@ export default function WeddingInvitation() {
       setTimeout(() => setSubmitted(false), 4000);
     } catch (error) {
       console.error('RSVP 제출 오류:', error);
-      alert('제출에 실패했습니다. 다시 시도해주세요.');
+      alert('제출에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -58,26 +56,24 @@ export default function WeddingInvitation() {
 
   return (
     <div style={styles.container}>
-      {/* Hero Section */}
+      {/* Hero */}
       <section style={styles.hero}>
-        <div style={styles.heroContent}>
-          <p style={styles.subtitle}>We invite you to celebrate our marriage</p>
-          <h1 style={styles.mainTitle}>
-            <span style={styles.nameSpan}>신랑이름</span>
-            <span style={styles.ampersand}>&</span>
-            <span style={styles.nameSpan}>신부이름</span>
-          </h1>
-          <p style={styles.weddingDate}>2024년 6월 1일 토요일</p>
-        </div>
+        <p style={styles.subtitle}>We invite you to celebrate our marriage</p>
+        <h1 style={styles.mainTitle}>
+          <span style={styles.nameSpan}>신랑이름</span>
+          <span style={styles.ampersand}>&</span>
+          <span style={styles.nameSpan}>신부이름</span>
+        </h1>
+        <p style={styles.weddingDate}>2024년 6월 1일 토요일</p>
       </section>
 
-      {/* Date & Venue Section */}
+      {/* Info */}
       <section style={styles.section}>
         <div style={styles.sectionInner}>
           <div style={styles.infoGrid}>
             <div style={styles.infoCard}>
               <p style={styles.infoLabel}>일시</p>
-              <p style={styles.infoValue}>2024.06.01 SAT</p>
+              <p style={styles.infoValue}>2024.06.01</p>
               <p style={styles.infoTime}>오후 4시 30분</p>
             </div>
             <div style={styles.infoCard}>
@@ -89,7 +85,7 @@ export default function WeddingInvitation() {
         </div>
       </section>
 
-      {/* Story Section */}
+      {/* Story */}
       <section style={styles.section}>
         <div style={styles.sectionInner}>
           <h2 style={styles.sectionTitle}>우리의 이야기</h2>
@@ -102,7 +98,7 @@ export default function WeddingInvitation() {
         </div>
       </section>
 
-      {/* Timeline Section */}
+      {/* Timeline */}
       <section style={styles.section}>
         <div style={styles.sectionInner}>
           <h2 style={styles.sectionTitle}>예식 순서</h2>
@@ -126,32 +122,28 @@ export default function WeddingInvitation() {
         </div>
       </section>
 
-      {/* Gallery Section */}
+      {/* Gallery */}
       <section style={styles.section}>
         <div style={styles.sectionInner}>
           <h2 style={styles.sectionTitle}>갤러리</h2>
           <div style={styles.gallery}>
             {[1, 2, 3, 4, 5, 6].map((idx) => (
               <div key={idx} style={styles.galleryItem}>
-                <div style={styles.galleryPlaceholder}>
-                  <p>Photo {idx}</p>
-                </div>
+                <div style={styles.galleryPlaceholder}>Photo {idx}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Location Section */}
+      {/* Location */}
       <section style={styles.section}>
         <div style={styles.sectionInner}>
           <h2 style={styles.sectionTitle}>오시는 길</h2>
           <div style={styles.locationInfo}>
             <p style={styles.locationTitle}>그랜드 볼룸</p>
-            <p style={styles.locationAddress}>서울시 강남구 테헤란로 123 그랜드 센터 B3</p>
-            <div style={styles.locationMap}>
-              <p>지도 (Google Maps 임베딩)</p>
-            </div>
+            <p style={styles.locationAddress}>서울시 강남구 테헤란로 123</p>
+            <div style={styles.locationMap}>지도 위치</div>
             <div style={styles.transportInfo}>
               <p><strong>지하철:</strong> 강남역 6번 출구</p>
               <p><strong>주차:</strong> 지하 주차장 완비</p>
@@ -160,7 +152,7 @@ export default function WeddingInvitation() {
         </div>
       </section>
 
-      {/* RSVP Section */}
+      {/* RSVP */}
       <section style={styles.rsvpSection} ref={rsvpRef}>
         <div style={styles.sectionInner}>
           <h2 style={styles.sectionTitle}>참석 의사 표시</h2>
@@ -168,12 +160,7 @@ export default function WeddingInvitation() {
           {submitted ? (
             <div style={styles.successMessage}>
               <p style={styles.successIcon}>✓</p>
-              <p style={styles.successText}>
-                참석 의사 표시가 완료되었습니다.
-              </p>
-              <p style={styles.successSubtext}>
-                소중한 시간 함께해주셔서 감사합니다.
-              </p>
+              <p style={styles.successText}>참석 의사 표시가 완료되었습니다.</p>
             </div>
           ) : (
             <form onSubmit={handleRsvpSubmit} style={styles.form}>
@@ -213,9 +200,8 @@ export default function WeddingInvitation() {
                       value="yes"
                       checked={rsvpData.attending === 'yes'}
                       onChange={handleInputChange}
-                      style={styles.radio}
                     />
-                    <span>참석하겠습니다</span>
+                    참석하겠습니다
                   </label>
                   <label style={styles.radioLabel}>
                     <input
@@ -224,9 +210,8 @@ export default function WeddingInvitation() {
                       value="no"
                       checked={rsvpData.attending === 'no'}
                       onChange={handleInputChange}
-                      style={styles.radio}
                     />
-                    <span>불참입니다</span>
+                    불참입니다
                   </label>
                 </div>
               </div>
@@ -249,12 +234,12 @@ export default function WeddingInvitation() {
                   </div>
 
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>식단 제한 사항 (선택)</label>
+                    <label style={styles.label}>식단 제한사항</label>
                     <textarea
                       name="dietary"
                       value={rsvpData.dietary}
                       onChange={handleInputChange}
-                      placeholder="알레르기나 식단 제한이 있으시면 알려주세요"
+                      placeholder="알레르기나 제한사항"
                       style={styles.textarea}
                     />
                   </div>
@@ -264,11 +249,7 @@ export default function WeddingInvitation() {
               <button
                 type="submit"
                 disabled={loading}
-                style={{
-                  ...styles.submitButton,
-                  opacity: loading ? 0.6 : 1,
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                }}
+                style={{...styles.submitButton, opacity: loading ? 0.6 : 1}}
               >
                 {loading ? '제출 중...' : '참석 의사 표시'}
               </button>
@@ -277,7 +258,7 @@ export default function WeddingInvitation() {
         </div>
       </section>
 
-      {/* Account Section */}
+      {/* Account */}
       <section style={styles.section}>
         <div style={styles.sectionInner}>
           <h2 style={styles.sectionTitle}>축의금</h2>
@@ -296,19 +277,11 @@ export default function WeddingInvitation() {
 
       {/* Footer */}
       <section style={styles.footer}>
-        <p style={styles.footerText}>
-          Thank you for being a part of our story
-        </p>
+        <p style={styles.footerText}>Thank you for being part of our story</p>
       </section>
 
-      {/* Floating RSVP Button */}
-      <button
-        onClick={scrollToRsvp}
-        style={styles.floatingButton}
-        title="참석 의사 표시"
-      >
-        RSVP
-      </button>
+      {/* RSVP Button */}
+      <button onClick={scrollToRsvp} style={styles.floatingButton}>RSVP</button>
     </div>
   );
 }
@@ -316,23 +289,15 @@ export default function WeddingInvitation() {
 const styles = {
   container: {
     width: '100%',
-    maxWidth: '100%',
     margin: 0,
     padding: 0,
-    fontFamily: '"Noto Serif CJK KR", Georgia, serif',
     backgroundColor: '#faf8f5',
     color: '#2c2c2c',
   },
-  
-  // Hero Section
   hero: {
-    backgroundImage: 'linear-gradient(135deg, #e8ddd0 0%, #f5f1eb 100%)',
+    background: 'linear-gradient(135deg, #e8ddd0 0%, #f5f1eb 100%)',
     padding: '60px 20px',
-    textAlign: 'center',
-    marginBottom: 0,
-  },
-  heroContent: {
-    maxWidth: '100%',
+    textAlign: 'center' as const,
   },
   subtitle: {
     fontSize: '14px',
@@ -346,27 +311,21 @@ const styles = {
     fontWeight: 300,
     marginBottom: '15px',
     lineHeight: 1.2,
-    letterSpacing: '-1px',
   },
   nameSpan: {
-    display: 'block',
-    fontWeight: 300,
+    display: 'block' as const,
   },
   ampersand: {
-    display: 'block',
+    display: 'block' as const,
     fontSize: '32px',
     color: '#b89968',
     margin: '10px 0',
-    fontWeight: 300,
   },
   weddingDate: {
     fontSize: '16px',
     color: '#7a6d5f',
-    fontWeight: 300,
     letterSpacing: '1px',
   },
-
-  // Section Styling
   section: {
     padding: '50px 20px',
     borderBottom: '1px solid #e8e8e8',
@@ -384,15 +343,12 @@ const styles = {
     fontSize: '28px',
     fontWeight: 300,
     marginBottom: '30px',
-    textAlign: 'center',
-    letterSpacing: '-0.5px',
+    textAlign: 'center' as const,
     paddingBottom: '15px',
     borderBottom: '2px solid #b89968',
     display: 'inline-block',
     width: '100%',
   },
-
-  // Info Grid
   infoGrid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
@@ -402,58 +358,48 @@ const styles = {
     backgroundColor: '#ffffff',
     padding: '25px',
     borderRadius: '8px',
-    textAlign: 'center',
+    textAlign: 'center' as const,
     boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
   },
   infoLabel: {
     fontSize: '12px',
     color: '#b89968',
-    textTransform: 'uppercase',
+    textTransform: 'uppercase' as const,
     letterSpacing: '1px',
     marginBottom: '8px',
-    fontWeight: 400,
   },
   infoValue: {
     fontSize: '20px',
     fontWeight: 300,
-    color: '#2c2c2c',
     marginBottom: '5px',
   },
   infoTime: {
     fontSize: '14px',
     color: '#7a6d5f',
-    fontWeight: 300,
   },
-
-  // Story
   storyText: {
     fontSize: '16px',
     lineHeight: 1.8,
     color: '#4a4a4a',
-    textAlign: 'center',
-    fontWeight: 300,
-    letterSpacing: '0.5px',
+    textAlign: 'center' as const,
   },
-
-  // Timeline
   timeline: {
-    position: 'relative',
+    position: 'relative' as const,
     paddingLeft: '40px',
   },
   timelineItem: {
     display: 'flex',
     marginBottom: '30px',
-    position: 'relative',
+    position: 'relative' as const,
   },
   timelineDot: {
     width: '12px',
     height: '12px',
     backgroundColor: '#b89968',
     borderRadius: '50%',
-    position: 'absolute',
+    position: 'absolute' as const,
     left: '-47px',
     top: '5px',
-    border: '3px solid #faf8f5',
   },
   timelineContent: {
     flex: 1,
@@ -462,15 +408,11 @@ const styles = {
     fontSize: '14px',
     color: '#b89968',
     fontWeight: 600,
-    marginBottom: '4px',
   },
   timelineEvent: {
     fontSize: '16px',
     color: '#2c2c2c',
-    fontWeight: 300,
   },
-
-  // Gallery
   gallery: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
@@ -490,10 +432,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     color: '#b89968',
-    fontWeight: 300,
   },
-
-  // Location
   locationInfo: {
     backgroundColor: '#ffffff',
     padding: '25px',
@@ -503,13 +442,11 @@ const styles = {
     fontSize: '18px',
     fontWeight: 500,
     marginBottom: '8px',
-    color: '#2c2c2c',
   },
   locationAddress: {
     fontSize: '14px',
     color: '#7a6d5f',
     marginBottom: '20px',
-    lineHeight: 1.6,
   },
   locationMap: {
     backgroundColor: '#e8ddd0',
@@ -526,24 +463,20 @@ const styles = {
     color: '#4a4a4a',
     lineHeight: 1.8,
   },
-
-  // Form
   form: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as const,
     gap: '20px',
   },
   formGroup: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as const,
   },
   label: {
     fontSize: '14px',
     fontWeight: 600,
     marginBottom: '8px',
-    color: '#2c2c2c',
-    textTransform: 'uppercase',
-    letterSpacing: '0.5px',
+    textTransform: 'uppercase' as const,
   },
   input: {
     padding: '12px 15px',
@@ -551,7 +484,6 @@ const styles = {
     border: '1px solid #e0e0e0',
     borderRadius: '6px',
     fontFamily: 'inherit',
-    transition: 'border-color 0.3s ease',
     backgroundColor: '#fafafa',
   },
   select: {
@@ -561,7 +493,6 @@ const styles = {
     borderRadius: '6px',
     fontFamily: 'inherit',
     backgroundColor: '#fafafa',
-    cursor: 'pointer',
   },
   textarea: {
     padding: '12px 15px',
@@ -570,7 +501,6 @@ const styles = {
     borderRadius: '6px',
     fontFamily: 'inherit',
     minHeight: '100px',
-    resize: 'vertical',
     backgroundColor: '#fafafa',
   },
   radioGroup: {
@@ -580,12 +510,7 @@ const styles = {
   radioLabel: {
     display: 'flex',
     alignItems: 'center',
-    fontSize: '15px',
-    cursor: 'pointer',
     gap: '8px',
-  },
-  radio: {
-    cursor: 'pointer',
   },
   submitButton: {
     padding: '14px',
@@ -596,15 +521,11 @@ const styles = {
     border: 'none',
     borderRadius: '6px',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
+    textTransform: 'uppercase' as const,
     marginTop: '10px',
   },
-
-  // Success Message
   successMessage: {
-    textAlign: 'center',
+    textAlign: 'center' as const,
     padding: '40px 20px',
     backgroundColor: '#f0f5f0',
     borderRadius: '8px',
@@ -612,21 +533,12 @@ const styles = {
   successIcon: {
     fontSize: '48px',
     color: '#7a9f7a',
-    margin: '0 0 15px 0',
-    display: 'block',
+    marginBottom: '15px',
   },
   successText: {
     fontSize: '18px',
     fontWeight: 500,
-    color: '#2c2c2c',
-    marginBottom: '10px',
   },
-  successSubtext: {
-    fontSize: '14px',
-    color: '#7a6d5f',
-  },
-
-  // Account Cards
   accountGrid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
@@ -636,38 +548,30 @@ const styles = {
     backgroundColor: '#ffffff',
     padding: '20px',
     borderRadius: '8px',
-    textAlign: 'center',
+    textAlign: 'center' as const,
     boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
   },
   accountName: {
     fontSize: '14px',
     fontWeight: 600,
-    color: '#2c2c2c',
     marginBottom: '8px',
   },
   accountBank: {
     fontSize: '13px',
     color: '#7a6d5f',
-    fontWeight: 300,
     fontFamily: 'monospace',
   },
-
-  // Footer
   footer: {
     padding: '40px 20px',
-    textAlign: 'center',
+    textAlign: 'center' as const,
     backgroundColor: '#ffffff',
   },
   footerText: {
     fontSize: '14px',
     color: '#b89968',
-    fontWeight: 300,
-    letterSpacing: '1px',
   },
-
-  // Floating Button
   floatingButton: {
-    position: 'fixed',
+    position: 'fixed' as const,
     bottom: '30px',
     right: '20px',
     width: '56px',
@@ -680,7 +584,6 @@ const styles = {
     fontWeight: 600,
     cursor: 'pointer',
     boxShadow: '0 4px 12px rgba(184, 153, 104, 0.3)',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     zIndex: 999,
   },
 };
