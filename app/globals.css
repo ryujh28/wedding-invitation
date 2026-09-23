@@ -705,7 +705,7 @@ img {
   color: var(--muted);
 }
 
-/* Footer / floating */
+/* Footer */
 .footer {
   padding: 48px 20px 64px;
   text-align: center;
@@ -713,22 +713,6 @@ img {
   font-style: italic;
   font-size: 16px;
   color: var(--gold);
-}
-.floating {
-  position: fixed;
-  bottom: 24px;
-  right: max(20px, calc(50vw - 240px + 20px));
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(184, 153, 104, 0.92);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 14px rgba(184, 153, 104, 0.35);
-  z-index: 999;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -745,25 +729,31 @@ img {
 }
 
 /* 지도 */
-a.loc-map {
-  display: block;
-  overflow: hidden;
-  padding: 0;
+.loc-map {
   height: 240px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.loc-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
 }
 .map-links {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
   margin-bottom: 8px;
 }
 .map-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   padding: 13px 0;
-  font-size: 14px;
+  font-size: 13px;
+  white-space: nowrap;
   color: var(--ink);
   text-decoration: none;
   background: #fff;
@@ -781,6 +771,9 @@ a.loc-map {
 }
 .map-dot.naver {
   background: #03c75a;
+}
+.map-dot.google {
+  background: #4285f4;
 }
 .map-dot.kakao {
   background: #fee500;

@@ -54,8 +54,6 @@ export const TRANSPORT = [
   },
 ];
 
-// 네이버 지도 Client ID (NCP 콘솔에서 발급). 비워두면 지도 없이 길찾기 버튼만 보입니다.
-export const NAVER_MAP_CLIENT_ID = '';
 
 export const SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxfdaKBePphPrqCqrQqk-LoTQEceDJ9Ctuiq1IiBoSo1G379TOq5G20KQjSjHqwsKIZsw/exec';
@@ -96,6 +94,12 @@ export const dateKo = `${WEDDING.year}년 ${WEDDING.month}월 ${WEDDING.day}일 
 export const venueFull = `${VENUE.place} ${VENUE.floor} ${VENUE.hall}`;
 
 export const MAP_LINKS = {
-  naver: `https://map.naver.com/p/search/${encodeURIComponent(VENUE.place)}`,
+  naver: `https://naver.me/xOxHski3`,
   kakao: `https://map.kakao.com/link/map/${encodeURIComponent(VENUE.place)},${VENUE.lat},${VENUE.lng}`,
+  google: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${VENUE.place} ${VENUE.address}`)}`,
 };
+
+// 청첩장 안에 보여줄 구글 지도 (API 키 불필요)
+export const GOOGLE_MAP_EMBED = `https://maps.google.com/maps?q=${encodeURIComponent(
+  `${VENUE.place} ${VENUE.address}`
+)}&z=16&hl=ko&output=embed`;

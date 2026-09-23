@@ -7,11 +7,11 @@ import {
   BRIDE,
   CONTACT,
   GALLERY,
+  GOOGLE_MAP_EMBED,
   GREETING,
   GROOM,
   HERO_PHOTOS,
   MAP_LINKS,
-  NAVER_MAP_CLIENT_ID,
   SCHEDULE,
   SCRIPT_URL,
   TRANSPORT,
@@ -164,67 +164,6 @@ function Calendar() {
   );
 }
 
-/* 네이버 지도 (Client ID가 있을 때만 표시) */
-declare global {
-  interface Window {
-    naver?: any;
-    navermap_authFailure?: () => void;
-  }
-}
-
-function NaverMap() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    if (!NAVER_MAP_CLIENT_ID || !ref.current) return;
-    window.navermap_authFailure = () => setFailed(true);
-
-    const draw = () => {
-      const { maps } = window.naver;
-      const pos = new maps.LatLng(VENUE.lat, VENUE.lng);
-      const map = new maps.Map(ref.current, {
-        center: pos,
-        zoom: 16,
-        draggable: false, // 모바일에서 지도가 페이지 스크롤을 가로채지 않도록
-        pinchZoom: false,
-        scrollWheel: false,
-        keyboardShortcuts: false,
-        disableDoubleTapZoom: true,
-        disableDoubleClickZoom: true,
-        zoomControl: false,
-        mapDataControl: false,
-        scaleControl: false,
-      });
-      new maps.Marker({ position: pos, map });
-    };
-
-    if (window.naver?.maps) {
-      draw();
-      return;
-    }
-    const id = 'naver-map-sdk';
-    let script = document.getElementById(id) as HTMLScriptElement | null;
-    if (!script) {
-      script = document.createElement('script');
-      script.id = id;
-      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}`;
-      script.async = true;
-      document.head.appendChild(script);
-    }
-    script.addEventListener('load', draw);
-    script.addEventListener('error', () => setFailed(true));
-    return () => script?.removeEventListener('load', draw);
-  }, []);
-
-  if (!NAVER_MAP_CLIENT_ID || failed) return null;
-  return (
-    <a href={MAP_LINKS.naver} target="_blank" rel="noopener noreferrer" className="loc-map" aria-label="네이버 지도에서 보기">
-      <div ref={ref} style={{ width: '100%', height: '100%' }} />
-    </a>
-  );
-}
-
 function Gallery() {
   const [open, setOpen] = useState<number | null>(null);
   const [showAll, setShowAll] = useState(false);
@@ -330,7 +269,6 @@ export default function Home() {
   const [rsvp, setRsvp] = useState(EMPTY_RSVP);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const rsvpRef = useRef<HTMLElement>(null);
   useReveal();
   useParallax();
 
@@ -474,7 +412,15 @@ export default function Home() {
           <p className="contact loc-contact">
             문의 <a href={`tel:${CONTACT.tel}`}>{CONTACT.tel}</a> ({CONTACT.label})
           </p>
-          <NaverMap />
+          <div className="loc-map">
+            <iframe
+              src={GOOGLE_MAP_EMBED}
+              title={`${VENUE.place} 지도`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
           <div className="map-links">
             <a href={MAP_LINKS.naver} target="_blank" rel="noopener noreferrer" className="map-link">
               <span className="map-dot naver" />
@@ -483,6 +429,10 @@ export default function Home() {
             <a href={MAP_LINKS.kakao} target="_blank" rel="noopener noreferrer" className="map-link">
               <span className="map-dot kakao" />
               카카오맵
+            </a>
+            <a href={MAP_LINKS.google} target="_blank" rel="noopener noreferrer" className="map-link">
+              <span className="map-dot google" />
+              구글 지도
             </a>
           </div>
           <div className="loc-info">
@@ -501,7 +451,7 @@ export default function Home() {
       <PhotoBand src="/photos/07.jpg" />
 
       {/* RSVP */}
-      <section className="section" ref={rsvpRef}>
+      <section className="section">
         <p className="eyebrow reveal">R.S.V.P.</p>
         <h2 className="title reveal">참석 의사 전달</h2>
         <p className="body-text small reveal">
@@ -603,7 +553,7 @@ export default function Home() {
         <p className="body-text small reveal">
           멀리서도 축하의 마음을 전하고 싶으신 분들을 위해
           <br />
-          계좌번호를 안내드립니다.
+          안내드립니다.
           <br />
           <br />
           보내주시는 따뜻한 마음에 깊이 감사드립니다.
@@ -623,12 +573,6 @@ export default function Home() {
       <footer className="footer">
         <p>Thank you for being part of our story</p>
       </footer>
-
-      <button onClick={() => rsvpRef.current?.scrollIntoView({ behavior: 'smooth' })} className="floating">
-        참석
-        <br />
-        의사
-      </button>
     </main>
   );
 }
