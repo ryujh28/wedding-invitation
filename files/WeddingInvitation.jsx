@@ -25,6 +25,7 @@ export default function WeddingInvitation() {
 
     try {
       // Google Apps Script 배포 URL (YOUR_SCRIPT_ID 부분 수정 필요)
+      const scriptUrl = 'https://script.google.com/macros/s/AKfycbxbGVuwj1_r62hILYTrmUNHchqpofaIvLwg_N37aWZDyLq7sR5EME9Z5L7t3ldocd4tbg/exec';
       const scriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
       
       const response = await fetch(scriptUrl, {
