@@ -24,9 +24,8 @@ export default function WeddingInvitation() {
     setLoading(true);
 
     try {
-      // Google Sheets 연동 (Web App으로 배포된 Apps Script)
-      // 아래 URL을 자신의 Google Apps Script deployment URL로 변경하세요
-      const scriptUrl = 'https://script.google.com/macros/d/YOUR_SCRIPT_ID/usercallback';
+      // Google Apps Script 배포 URL (YOUR_SCRIPT_ID 부분 수정 필요)
+      const scriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
       
       const response = await fetch(scriptUrl, {
         method: 'POST',
@@ -63,9 +62,9 @@ export default function WeddingInvitation() {
         <div style={styles.heroContent}>
           <p style={styles.subtitle}>We invite you to celebrate our marriage</p>
           <h1 style={styles.mainTitle}>
-            <span style={styles.nameSpan}>이름</span>
+            <span style={styles.nameSpan}>신랑이름</span>
             <span style={styles.ampersand}>&</span>
-            <span style={styles.nameSpan}>이름</span>
+            <span style={styles.nameSpan}>신부이름</span>
           </h1>
           <p style={styles.weddingDate}>2024년 6월 1일 토요일</p>
         </div>
