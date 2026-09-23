@@ -742,3 +742,46 @@ img {
     transform: none;
   }
 }
+
+/* 지도 */
+a.loc-map {
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  height: 240px;
+}
+.map-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.map-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 0;
+  font-size: 14px;
+  color: var(--ink);
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid #e0dad0;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.map-link:active {
+  background: #f5f1eb;
+}
+.map-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.map-dot.naver {
+  background: #03c75a;
+}
+.map-dot.kakao {
+  background: #fee500;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}

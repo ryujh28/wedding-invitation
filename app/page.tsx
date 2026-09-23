@@ -2,51 +2,25 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-/* ------------------------------------------------------------------ */
-/*  기본 정보 — 여기만 고치면 전체에 반영됩니다                           */
-/* ------------------------------------------------------------------ */
-const GROOM = { name: '류재현', en: 'Groom', parents: '류완석 · 이호연의 아들', photo: '/photos/01.jpg' };
-const BRIDE = { name: '차지예', en: 'Bride', parents: '차우철 · 김기영의 딸', photo: '/photos/02.jpg' };
-
-// 예식 일시 (월은 1~12 그대로)
-const WEDDING = { year: 2027, month: 3, day: 20, hour: 12, minute: 0 };
-const VENUE = { name: '크리스탈볼룸', address: '서울 송파구 올림픽로 240, 롯데호텔월드' };
-
-const SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbxfdaKBePphPrqCqrQqk-LoTQEceDJ9Ctuiq1IiBoSo1G379TOq5G20KQjSjHqwsKIZsw/exec';
-
-// 메인 화면 슬라이드 (순서대로 크로스페이드)
-const HERO_PHOTOS = ['/photos/04.jpg', '/photos/08.jpg', '/photos/06.jpg', '/photos/05.jpg', '/photos/09.jpg'];
-// 갤러리 전체
-const GALLERY = Array.from({ length: 10 }, (_, i) => `/photos/${String(i).padStart(2, '0')}.jpg`);
-
-const ACCOUNTS = {
-  groom: [
-    { role: '신랑', name: '류재현', bank: '국민은행', number: '123-456-789012' },
-    { role: '신랑 아버지', name: '류완석', bank: '은행', number: '000-000-000000' },
-    { role: '신랑 어머니', name: '이호연', bank: '은행', number: '000-000-000000' },
-  ],
-  bride: [
-    { role: '신부', name: '차지예', bank: '우리은행', number: '123-456-789012' },
-    { role: '신부 아버지', name: '차우철', bank: '은행', number: '000-000-000000' },
-    { role: '신부 어머니', name: '김기영', bank: '은행', number: '000-000-000000' },
-  ],
-};
-
-const SCHEDULE = [
-  { time: '12:00', event: '결혼식' },
-  { time: '13:00', event: '2부 예식' }
-];
-
-/* ------------------------------------------------------------------ */
-
-const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
-const pad = (n: number) => String(n).padStart(2, '0');
-const weddingDate = new Date(WEDDING.year, WEDDING.month - 1, WEDDING.day, WEDDING.hour, WEDDING.minute);
-const ampm = WEDDING.hour < 12 ? '오전' : '오후';
-const hour12 = WEDDING.hour % 12 === 0 ? 12 : WEDDING.hour % 12;
-const timeKo = `${ampm} ${hour12}시${WEDDING.minute ? ` ${WEDDING.minute}분` : ''}`;
-const dateKo = `${WEDDING.year}년 ${WEDDING.month}월 ${WEDDING.day}일 ${WEEKDAYS[weddingDate.getDay()]}요일`;
+import {
+  ACCOUNTS,
+  BRIDE,
+  GALLERY,
+  GROOM,
+  HERO_PHOTOS,
+  MAP_LINKS,
+  NAVER_MAP_CLIENT_ID,
+  SCHEDULE,
+  SCRIPT_URL,
+  TRANSPORT,
+  VENUE,
+  WEDDING,
+  WEEKDAYS,
+  dateKo,
+  pad,
+  timeKo,
+  venueFull,
+} from './config';
 
 /* 스크롤 시 서서히 나타나는 효과 */
 function useReveal() {
@@ -185,6 +159,67 @@ function Calendar() {
         </p>
       )}
     </div>
+  );
+}
+
+/* 네이버 지도 (Client ID가 있을 때만 표시) */
+declare global {
+  interface Window {
+    naver?: any;
+    navermap_authFailure?: () => void;
+  }
+}
+
+function NaverMap() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    if (!NAVER_MAP_CLIENT_ID || !ref.current) return;
+    window.navermap_authFailure = () => setFailed(true);
+
+    const draw = () => {
+      const { maps } = window.naver;
+      const pos = new maps.LatLng(VENUE.lat, VENUE.lng);
+      const map = new maps.Map(ref.current, {
+        center: pos,
+        zoom: 16,
+        draggable: false, // 모바일에서 지도가 페이지 스크롤을 가로채지 않도록
+        pinchZoom: false,
+        scrollWheel: false,
+        keyboardShortcuts: false,
+        disableDoubleTapZoom: true,
+        disableDoubleClickZoom: true,
+        zoomControl: false,
+        mapDataControl: false,
+        scaleControl: false,
+      });
+      new maps.Marker({ position: pos, map });
+    };
+
+    if (window.naver?.maps) {
+      draw();
+      return;
+    }
+    const id = 'naver-map-sdk';
+    let script = document.getElementById(id) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = id;
+      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}`;
+      script.async = true;
+      document.head.appendChild(script);
+    }
+    script.addEventListener('load', draw);
+    script.addEventListener('error', () => setFailed(true));
+    return () => script?.removeEventListener('load', draw);
+  }, []);
+
+  if (!NAVER_MAP_CLIENT_ID || failed) return null;
+  return (
+    <a href={MAP_LINKS.naver} target="_blank" rel="noopener noreferrer" className="loc-map" aria-label="네이버 지도에서 보기">
+      <div ref={ref} style={{ width: '100%', height: '100%' }} />
+    </a>
   );
 }
 
@@ -348,7 +383,7 @@ export default function Home() {
           <p className="hero-date">
             {WEDDING.year}. {pad(WEDDING.month)}. {pad(WEDDING.day)} · {timeKo}
           </p>
-          <p className="hero-venue">{VENUE.name}</p>
+          <p className="hero-venue">{venueFull}</p>
         </div>
         <div className="scroll-hint" aria-hidden>
           <span />
@@ -393,7 +428,7 @@ export default function Home() {
         <p className="body-text reveal">
           {dateKo} {timeKo}
           <br />
-          {VENUE.name}
+          {venueFull}
         </p>
         <Calendar />
 
@@ -420,14 +455,28 @@ export default function Home() {
         <p className="eyebrow reveal">LOCATION</p>
         <h2 className="title reveal">오시는 길</h2>
         <div className="reveal">
-          <p className="loc-name">{VENUE.name}</p>
+          <p className="loc-name">{venueFull}</p>
           <p className="loc-addr">{VENUE.address}</p>
-          <div className="loc-map">지도 위치</div>
+          <NaverMap />
+          <div className="map-links">
+            <a href={MAP_LINKS.naver} target="_blank" rel="noopener noreferrer" className="map-link">
+              <span className="map-dot naver" />
+              네이버 지도
+            </a>
+            <a href={MAP_LINKS.kakao} target="_blank" rel="noopener noreferrer" className="map-link">
+              <span className="map-dot kakao" />
+              카카오맵
+            </a>
+          </div>
           <div className="loc-info">
-            <p className="loc-label">지하철</p>
-            <p>강남역 6번 출구</p>
-            <p className="loc-label">주차</p>
-            <p>지하 주차장 완비</p>
+            {TRANSPORT.map((t) => (
+              <div key={t.label}>
+                <p className="loc-label">{t.label}</p>
+                {t.lines.map((l) => (
+                  <p key={l}>{l}</p>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>

@@ -1,9 +1,24 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { BRIDE, GROOM, SITE_URL, dateKo, timeKo, venueFull } from './config';
+
+const title = `${GROOM.name} ♥ ${BRIDE.name} 결혼합니다`;
+const description = `${dateKo} ${timeKo} · ${venueFull}`;
 
 export const metadata: Metadata = {
-  title: '우리의 결혼식',
-  description: '청첩장',
+  metadataBase: new URL(SITE_URL),
+  title,
+  description,
+  openGraph: {
+    type: 'website',
+    url: SITE_URL,
+    title,
+    description,
+    siteName: '모바일 청첩장',
+    locale: 'ko_KR',
+    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: title }],
+  },
+  twitter: { card: 'summary_large_image', title, description, images: ['/og.jpg'] },
 };
 
 export default function RootLayout({
