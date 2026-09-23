@@ -32,7 +32,7 @@ export default function Home() {
           name: rsvpData.name,
           phone: rsvpData.phone,
           attending: rsvpData.attending,
-          guestCount: rsvpData.guestCount,
+          guestCount: String(rsvpData.guestCount),
           dietary: rsvpData.dietary,
           timestamp: new Date().toISOString(),
         }),
