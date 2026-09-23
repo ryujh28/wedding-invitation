@@ -625,7 +625,9 @@ export default function Home() {
       </footer>
 
       <button onClick={() => rsvpRef.current?.scrollIntoView({ behavior: 'smooth' })} className="floating">
-        RSVP
+        참석
+        <br />
+        의사
       </button>
     </main>
   );
