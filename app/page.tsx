@@ -43,6 +43,27 @@ function useReveal() {
   }, []);
 }
 
+/* 첫 화면 높이를 처음 열렸을 때의 값으로 고정
+   (카톡 인앱 브라우저는 주소창이 숨을 때 화면 크기가 실제로 바뀌어서, 고정하지 않으면 아래 내용이 계속 밀림) */
+function useLockedHeight(ref: React.RefObject<HTMLElement>) {
+  useEffect(() => {
+    let width = window.innerWidth;
+    const lock = () => {
+      if (ref.current) ref.current.style.height = `${window.innerHeight}px`;
+    };
+    lock();
+    const onResize = () => {
+      // 가로/세로 회전처럼 폭이 바뀔 때만 다시 계산
+      if (window.innerWidth !== width) {
+        width = window.innerWidth;
+        lock();
+      }
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [ref]);
+}
+
 function HeroSlideshow() {
   const [idx, setIdx] = useState(0);
   useEffect(() => {
@@ -244,7 +265,9 @@ export default function Home() {
   const [rsvp, setRsvp] = useState(EMPTY_RSVP);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
   useReveal();
+  useLockedHeight(heroRef);
 
   const set = (k: keyof typeof EMPTY_RSVP, v: string) => setRsvp((p) => ({ ...p, [k]: v }));
 
@@ -281,7 +304,7 @@ export default function Home() {
   return (
     <main className="page">
       {/* Hero */}
-      <section className="hero">
+      <section className="hero" ref={heroRef}>
         <HeroSlideshow />
         <div className="hero-shade" />
         <Petals />
