@@ -27,7 +27,7 @@ import {
 /* 스크롤 시 서서히 나타나는 효과 */
 function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll('.reveal');
+    const els = document.querySelectorAll('.reveal, .photo-band');
     const io = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
@@ -40,31 +40,6 @@ function useReveal() {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
-}
-
-/* 사진 띠 패럴랙스 */
-function useParallax() {
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
-        const box = el.parentElement!.getBoundingClientRect();
-        const progress = (box.top + box.height / 2 - window.innerHeight / 2) / window.innerHeight;
-        el.style.transform = `translate3d(0, ${progress * -60}px, 0) scale(1.15)`;
-      });
-      raf = 0;
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
   }, []);
 }
 
@@ -112,7 +87,7 @@ function Petals() {
 function PhotoBand({ src, children }: { src: string; children?: React.ReactNode }) {
   return (
     <div className="photo-band">
-      <img data-parallax src={src} alt="" loading="lazy" />
+      <img src={src} alt="" loading="lazy" />
       {children && <div className="photo-band-text">{children}</div>}
     </div>
   );
@@ -270,7 +245,6 @@ export default function Home() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   useReveal();
-  useParallax();
 
   const set = (k: keyof typeof EMPTY_RSVP, v: string) => setRsvp((p) => ({ ...p, [k]: v }));
 
